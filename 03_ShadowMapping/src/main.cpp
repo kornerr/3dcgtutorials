@@ -92,7 +92,7 @@ int main(int argc, char** argv)
 	osg::ref_ptr<osg::Group> scene = new osg::Group;
 
 	// load cow
-	osg::ref_ptr<osg::Node> cow = osgDB::readNodeFile("../data/cow.osg");
+	osg::ref_ptr<osg::Node> cow = osgDB::readNodeFile("data/cow.osg");
 	osg::BoundingSphere bs = cow->getBound();
 
 	// create floating point texture
@@ -130,8 +130,8 @@ int main(int argc, char** argv)
 	osg::Matrixd shadowMatrix = viewMatrix * projectionMatrix * osg::Matrixd::translate(1.0, 1.0, 1.0) * osg::Matrixd::scale(0.5, 0.5, 0.5);
 
 	// add shadow pass shader
-	osg::ref_ptr<osg::Shader> vsShader = osgDB::readShaderFile("../shader/shadow_pass.vert");
-	osg::ref_ptr<osg::Shader> fsShader = osgDB::readShaderFile("../shader/shadow_pass.frag");
+	osg::ref_ptr<osg::Shader> vsShader = osgDB::readShaderFile("shader/shadow_pass.vert");
+	osg::ref_ptr<osg::Shader> fsShader = osgDB::readShaderFile("shader/shadow_pass.frag");
 	osg::ref_ptr<osg::Program> program = new osg::Program;
 	program->addShader(vsShader);
 	program->addShader(fsShader);
@@ -141,8 +141,8 @@ int main(int argc, char** argv)
 	geode->addDrawable(createQuads());
 
 	// add main pass shader
-	osg::ref_ptr<osg::Shader> vsShader_untextured = osgDB::readShaderFile("../shader/main_pass_untextured.vert");
-	osg::ref_ptr<osg::Shader> fsShader_untextured = osgDB::readShaderFile("../shader/main_pass_untextured.frag");
+	osg::ref_ptr<osg::Shader> vsShader_untextured = osgDB::readShaderFile("shader/main_pass_untextured.vert");
+	osg::ref_ptr<osg::Shader> fsShader_untextured = osgDB::readShaderFile("shader/main_pass_untextured.frag");
 	osg::ref_ptr<osg::Program> program_untextured = new osg::Program;
 	program_untextured->addShader(vsShader_untextured);
 	program_untextured->addShader(fsShader_untextured);
@@ -154,8 +154,8 @@ int main(int argc, char** argv)
 	geode->getOrCreateStateSet()->addUniform(new osg::Uniform("shadowViewMatrix", osg::Matrixf(viewMatrix)));
 
 	// add main pass shader
-	osg::ref_ptr<osg::Shader> vsShader_main = osgDB::readShaderFile("../shader/main_pass.vert");
-	osg::ref_ptr<osg::Shader> fsShader_main = osgDB::readShaderFile("../shader/main_pass.frag");
+	osg::ref_ptr<osg::Shader> vsShader_main = osgDB::readShaderFile("shader/main_pass.vert");
+	osg::ref_ptr<osg::Shader> fsShader_main = osgDB::readShaderFile("shader/main_pass.frag");
 	osg::ref_ptr<osg::Program> program_main = new osg::Program;
 	program_main->addShader(vsShader_main);
 	program_main->addShader(fsShader_main);
