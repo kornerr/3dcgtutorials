@@ -98,13 +98,9 @@ int main(int argc, char** argv)
 	// create floating point texture
 	osg::ref_ptr<osg::Texture2D> depthTexture = new osg::Texture2D;
 	depthTexture->setTextureSize(1024, 1024);
-	depthTexture->setInternalFormat(GL_R32F);
+	depthTexture->setInternalFormat(GL_RGBA16F);
 	depthTexture->setSourceType(GL_FLOAT);
-	depthTexture->setSourceFormat(GL_RED);
-	depthTexture->setFilter(osg::Texture2D::MIN_FILTER, osg::Texture2D::LINEAR);
-	depthTexture->setFilter(osg::Texture2D::MAG_FILTER, osg::Texture2D::LINEAR);
-	depthTexture->setWrap(osg::Texture2D::WRAP_S, osg::Texture2D::CLAMP);
-	depthTexture->setWrap(osg::Texture2D::WRAP_T, osg::Texture2D::CLAMP);
+	depthTexture->setSourceFormat(GL_RGBA);
 
 	// create a directional light source
 	osg::Vec3f lightDirection(0.0f, 0.8f, 1.0f);
@@ -113,6 +109,7 @@ int main(int argc, char** argv)
 	// create render to texture camera
 	osg::ref_ptr<osg::Camera> shadowPassCamera = new osg::Camera;
 	shadowPassCamera->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // ???
 	shadowPassCamera->setClearColor(osg::Vec4f(1000.0f, 0.0f, 0.0f, 1.0f));
 	shadowPassCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
 	shadowPassCamera->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
@@ -125,7 +122,6 @@ int main(int argc, char** argv)
 	shadowPassCamera->setViewMatrix(viewMatrix);
 	shadowPassCamera->attach(osg::Camera::COLOR_BUFFER, depthTexture);
 	shadowPassCamera->addChild(cow);
-	shadowPassCamera->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
 
 	osg::Matrixd shadowMatrix = viewMatrix * projectionMatrix * osg::Matrixd::translate(1.0, 1.0, 1.0) * osg::Matrixd::scale(0.5, 0.5, 0.5);
 
@@ -174,12 +170,6 @@ int main(int argc, char** argv)
 	scene->getOrCreateStateSet()->addUniform(new osg::Uniform("lightDir", lightDirection));
 
 	viewer->setSceneData(scene);
-
-	// add the state manipulator
-    viewer->addEventHandler(new osgGA::StateSetManipulator(viewer->getCamera()->getOrCreateStateSet()));
-
-	// add the stats handler
-    viewer->addEventHandler(new osgViewer::StatsHandler);
 
 	return viewer->run();
 }
